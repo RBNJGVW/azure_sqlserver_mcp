@@ -9,7 +9,7 @@ load_dotenv()
 
 CONN_STR = os.environ["SQL_CONN_STRING"]
 
-mcp = FastMCP(name="azuresql")
+mcp = FastMCP(name="azuresql", host="0.0.0.0", port=8000)
 
 
 @mcp.resource("schema://main")
@@ -56,4 +56,4 @@ def sql_write_data(sql: str, params: tuple = ()) -> str:
 
 
 if __name__ == "__main__":
-    mcp.run(transport="sse", host="0.0.0.0", port=8000)
+    mcp.run(transport="sse")
