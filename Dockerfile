@@ -4,18 +4,22 @@ FROM python:3.12-slim
 # 1. Instalar herramientas de compilación y ODBC Driver 18
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    curl \
-    gnupg \
-    unixodbc-dev \
-    build-essential && \
-    # Agrega repositorio de Microsoft y instala el driver ODBC
-    curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
-    curl https://packages.microsoft.com/config/debian/11/prod.list \
-    > /etc/apt/sources.list.d/mssql-release.list && \
+    curl \               
+    gnupg \              
+    unixodbc-dev && \ 
+    # 2. Configurar repositorio Microsoft
+    curl -sSL -O https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb && \
+    dpkg -i packages-microsoft-prod.deb && rm packages-microsoft-prod.deb && \
+    # 3. Instalar driver y herramientas
     apt-get update && \
-    ACCEPT_EULA=Y apt-get install -y msodbcsql18 mssql-tools && \
-    rm -rf /var/lib/apt/lists/*  
-# :contentReference[oaicite:0]{index=0}
+    ACCEPT_EULA=Y apt-get install -y \
+    msodbcsql18 \         
+    mssql-tools18 && \    
+    # 4. Kerberos (solo Debian slim)
+    apt-get install -y \
+    libgssapi-krb5-2 && \ 
+    # 5. Limpieza
+    rm -rf /var/lib/apt/lists/*
 
 # 2. Directorio de trabajo
 WORKDIR /app
