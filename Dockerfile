@@ -36,4 +36,4 @@ COPY . .
 EXPOSE 8000
 
 # 6. Comando de arranque
-CMD ["uvicorn", "azure_sqlserver_mcp_server:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "-u", "azure_sqlserver_mcp_server.py"]
